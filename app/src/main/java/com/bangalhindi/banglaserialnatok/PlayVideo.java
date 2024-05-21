@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -78,12 +79,6 @@ public class PlayVideo extends AppCompatActivity {
         progressDialog.show();
 
 
-        if(videoTitleContainerStatus){
-            vdoTitleContainer.setVisibility(View.VISIBLE);
-        }else{
-            vdoTitleContainer.setVisibility(View.GONE);
-        }
-
         webView = findViewById(R.id.webView);
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient() {
@@ -122,13 +117,12 @@ public class PlayVideo extends AppCompatActivity {
                 mOriginalSystemUiVisibility = getWindow().getDecorView().getSystemUiVisibility();
                 mOriginalOrientation = getRequestedOrientation();
                 mCustomViewCallback = callback;
-
-                videoTitleContainerStatus = !videoTitleContainerStatus;
-
                 ((FrameLayout) getWindow().getDecorView()).addView(mCustomView, new FrameLayout.LayoutParams(-1, -1));
                 getWindow().getDecorView().setSystemUiVisibility(3846);
                 setRequestedOrientation(0);
             }
+
+
         });
 
         WebSettings webSettings = webView.getSettings();
@@ -141,7 +135,15 @@ public class PlayVideo extends AppCompatActivity {
         if (!isNetworkAvailable()) {
             showConnectivityDialog();
         }
+
+
+
+
     }
+
+
+
+
 
     private class ExtractLinkTask extends AsyncTask<String, Void, String> {
         @Override
@@ -218,6 +220,19 @@ public class PlayVideo extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Landscape mode
+            vdoTitleContainer.setVisibility(View.GONE);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Portrait mode
+            vdoTitleContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

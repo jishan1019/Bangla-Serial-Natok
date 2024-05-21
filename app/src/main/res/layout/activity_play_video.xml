@@ -10,20 +10,29 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/vdoTitleContainer"
+
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
 
+
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                />
+
+
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/vdoTitleContainer"
                 android:orientation="horizontal"
                 android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/border"
-                android:layout_marginTop="15dp"
-
                 >
 
                 <TextView
@@ -39,15 +48,6 @@
                     android:text="hello" />
 
             </LinearLayout>
-
-            <WebView
-                android:id="@+id/webView"
-                android:layout_width="match_parent"
-                android:layout_height="280dp"
-                />
-
-
-
 
 
 
