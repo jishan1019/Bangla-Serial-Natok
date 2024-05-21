@@ -1,55 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/vdoTitleContainer"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:padding="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/border"
+                android:layout_marginTop="15dp"
+
+                >
 
                 <TextView
-                    android:id="@+id/textView"
-                    android:visibility="gone"
+                    android:id="@+id/tvTitle"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center |left"
+                    android:textColor="@color/brand_color1"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="hello" />
 
-                <TextView
-                    android:id="@+id/textAdsTop"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ads" />
             </LinearLayout>
 
             <WebView
                 android:id="@+id/webView"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="280dp"
+                />
 
-            <LinearLayout
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textAds"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ads" />
-            </LinearLayout>
+
+
+
+
         </LinearLayout>
     </ScrollView>
 

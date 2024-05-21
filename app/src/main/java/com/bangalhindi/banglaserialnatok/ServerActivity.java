@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -145,6 +146,7 @@ public class ServerActivity extends AppCompatActivity {
             View myView = layoutInflater.inflate(R.layout.list_item_natok,parent,false);
 
             TextView all_channel_titel = myView.findViewById(R.id.textViewNatokTitle);
+            LinearLayout playVideoBtn = myView.findViewById(R.id.playVideoBtn);
 
             HashMap<String,String> hashMap = arrayList.get(position);
 
@@ -153,7 +155,7 @@ public class ServerActivity extends AppCompatActivity {
 
             all_channel_titel.setText(vdo_title);
 
-            all_channel_titel.setOnClickListener(new View.OnClickListener() {
+            playVideoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 

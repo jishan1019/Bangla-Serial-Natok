@@ -18,7 +18,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -40,6 +42,8 @@ public class PlayVideo extends AppCompatActivity {
     public int mOriginalSystemUiVisibility;
     public ProgressDialog progressDialog;
     public WebView webView;
+    Boolean videoTitleContainerStatus = true;
+    LinearLayout vdoTitleContainer;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -48,12 +52,19 @@ public class PlayVideo extends AppCompatActivity {
         getWindow().setFlags(8192, 8192);
         setContentView(R.layout.activity_play_video);
 
+        vdoTitleContainer = findViewById(R.id.vdoTitleContainer);
+
+        getSupportActionBar().hide();
+
+
         ActionBar supportActionBar = getSupportActionBar();
-        TextView textView2 = findViewById(R.id.textView);
+        TextView tvTitle = findViewById(R.id.tvTitle);
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("dataTitle");
         String url = intent.getStringExtra("dataUrl");
+
+        tvTitle.setText(""+title);
 
         if (title != null && supportActionBar != null) {
             supportActionBar.setTitle(title);
@@ -65,6 +76,13 @@ public class PlayVideo extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.show();
+
+
+        if(videoTitleContainerStatus){
+            vdoTitleContainer.setVisibility(View.VISIBLE);
+        }else{
+            vdoTitleContainer.setVisibility(View.GONE);
+        }
 
         webView = findViewById(R.id.webView);
         webView.setWebViewClient(new WebViewClient());
@@ -104,6 +122,9 @@ public class PlayVideo extends AppCompatActivity {
                 mOriginalSystemUiVisibility = getWindow().getDecorView().getSystemUiVisibility();
                 mOriginalOrientation = getRequestedOrientation();
                 mCustomViewCallback = callback;
+
+                videoTitleContainerStatus = !videoTitleContainerStatus;
+
                 ((FrameLayout) getWindow().getDecorView()).addView(mCustomView, new FrameLayout.LayoutParams(-1, -1));
                 getWindow().getDecorView().setSystemUiVisibility(3846);
                 setRequestedOrientation(0);
@@ -125,6 +146,7 @@ public class PlayVideo extends AppCompatActivity {
     private class ExtractLinkTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
+
             try {
                 Iterator<Element> it = Jsoup.connect(urls[0]).get().select("iframe[src]").iterator();
                 while (it.hasNext()) {
