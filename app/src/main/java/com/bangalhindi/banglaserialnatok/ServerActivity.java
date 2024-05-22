@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,7 +38,7 @@ public class ServerActivity extends AppCompatActivity {
 
     String url = Config.BASE_URL;
 
-    ListView listView;
+    GridView listView;
 
     ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
     HashMap<String,String> hashMap;
@@ -91,11 +92,13 @@ public class ServerActivity extends AppCompatActivity {
 
                         String vdo_title = jsonObject.getString("vdo_title");
                         String vdo_url = jsonObject.getString("vdo_url");
+                        String date = jsonObject.getString("date");
 
 
                         HashMap<String, String> hashMap = new HashMap<>();
                         hashMap.put("vdo_title", vdo_title);
                         hashMap.put("vdo_url", vdo_url);
+                        hashMap.put("date", date);
 
                         arrayList.add(hashMap);
                     }
@@ -145,15 +148,18 @@ public class ServerActivity extends AppCompatActivity {
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View myView = layoutInflater.inflate(R.layout.list_item_natok,parent,false);
 
-            TextView all_channel_titel = myView.findViewById(R.id.textViewNatokTitle);
             LinearLayout playVideoBtn = myView.findViewById(R.id.playVideoBtn);
+            TextView all_channel_titel = myView.findViewById(R.id.textViewNatokTitle);
+            TextView epsdDate = myView.findViewById(R.id.epsdDate);
 
             HashMap<String,String> hashMap = arrayList.get(position);
 
             String vdo_title = hashMap.get("vdo_title");
             String vdo_url = hashMap.get("vdo_url");
+            String date = hashMap.get("date");
 
             all_channel_titel.setText(vdo_title);
+            epsdDate.setText(date);
 
             playVideoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

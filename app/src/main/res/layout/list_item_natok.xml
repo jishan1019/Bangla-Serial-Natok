@@ -8,48 +8,57 @@
 
    <androidx.cardview.widget.CardView
        android:layout_width="match_parent"
-       android:layout_height="70dp"
-       android:layout_marginLeft="8dp"
-       android:layout_marginRight="8dp"
-       android:layout_marginTop="5dp"
-       android:layout_marginBottom="5dp"
+       android:layout_height="100dp"
+       android:layout_margin="10dp"
        app:cardCornerRadius="10dp"
-       android:elevation="30dp"
-       android:backgroundTint="@color/white"
+       app:cardElevation="5dp"
+
        >
 
        <LinearLayout
            android:id="@+id/playVideoBtn"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
-           android:orientation="horizontal"
+           android:orientation="vertical"
            android:layout_gravity="center"
            android:gravity="center"
-           android:weightSum="2"
-           android:paddingLeft="8dp"
-           android:paddingRight="8dp"
-           android:paddingTop="3dp"
-           android:paddingBottom="3dp"
+           android:padding="5dp"
+           android:background="@color/white"
            >
+
+           <ImageView
+               android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:gravity="center |right"
+               android:src="@drawable/ic_baseline_play_circle_24"
+               />
 
            <TextView
                android:id="@+id/textViewNatokTitle"
                android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:textSize="17sp"
-               android:textColor="@color/black"
-               android:gravity="center |left"
+               android:layout_height="wrap_content"
+               android:textSize="16sp"
+               android:textColor="@color/primaryColor"
+               android:gravity="center"
+               android:textStyle="bold"
+               android:layout_marginTop="4dp"
+               android:maxLines="1"
                android:text="Natok Loading..."
-               android:layout_weight="1"
                />
 
-           <ImageView
-               android:layout_width="60dp"
-               android:layout_height="60dp"
-               android:gravity="center |right"
-               android:layout_weight="1"
-               android:src="@drawable/ic_baseline_play_circle_24"
+           <TextView
+               android:id="@+id/epsdDate"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="13sp"
+               android:textColor="@color/black"
+               android:gravity="center"
+               android:text="Date Loading.."
+               android:layout_marginTop="2dp"
+               android:maxLines="1"
                />
+
+
 
        </LinearLayout>
 
