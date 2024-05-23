@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     CardView btn1, btn2, btn3, btn4;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    TextView noticeTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         btn2 = activityMain.findViewById(R.id.btn2);
         btn3 = activityMain.findViewById(R.id.btn3);
         btn4 = activityMain.findViewById(R.id.btn4);
+        noticeTitle = activityMain.findViewById(R.id.noticeTitle);
+
+        noticeTitle.setSelected(true);
 
         //------- All Action Button Code ----------------
 

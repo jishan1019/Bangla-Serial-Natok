@@ -41,6 +41,7 @@
                />
 
            <TextView
+               android:id="@+id/noticeTitle"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textStyle="bold"
@@ -50,6 +51,13 @@
                android:text="@string/home_title"
                android:fontFamily="@font/kalpurush"
                android:layout_marginTop="2dp"
+               android:singleLine="true"
+               android:ellipsize="marquee"
+               android:marqueeRepeatLimit="marquee_forever"
+               android:scrollHorizontally="true"
+               android:focusable="true"
+               android:focusableInTouchMode="true"
+               android:freezesText="true"
                />
 
        </LinearLayout>

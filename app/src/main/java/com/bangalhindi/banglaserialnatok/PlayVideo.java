@@ -72,6 +72,8 @@ public class PlayVideo extends AppCompatActivity {
 
         tvTitle.setText(""+title);
 
+        tvTitle.setSelected(true);
+
         if (title != null && supportActionBar != null) {
             supportActionBar.setTitle(title);
 //            supportActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.brand_color1)));
