@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,6 +30,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.facebook.ads.AudienceNetworkAds;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class ServerActivity extends AppCompatActivity {
 
@@ -43,8 +49,9 @@ public class ServerActivity extends AppCompatActivity {
 
     ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
     HashMap<String,String> hashMap;
-
     ProgressBar proBar;
+
+    LinearLayout fbBanLayout;
 
 
     private String decryptUrl(String encryptedUrl) {
@@ -72,7 +79,33 @@ public class ServerActivity extends AppCompatActivity {
 
         proBar.setVisibility(View.VISIBLE);
 
+        fbBanLayout = findViewById(R.id.fbBanLayout);
 
+
+        //------------- Ads Init Activity ---------------
+
+        try {
+            ApplicationInfo applicationInfoApplovin = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            applicationInfoApplovin.metaData.putString("applovin.sdk.key", Config.ApplovinSdkKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        AudienceNetworkAds.initialize(ServerActivity.this);
+
+        AppLovinSdk.getInstance( ServerActivity.this ).setMediationProvider( "max" );
+        AppLovinSdk.initializeSdk( ServerActivity.this, new AppLovinSdk.SdkInitializationListener() {
+            @Override
+            public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
+            {
+            }
+        } );
+
+        if(Config.isAdsOpen){
+            FacebookActivity.loadFbBannerAds(ServerActivity.this, fbBanLayout);
+            FacebookActivity.loadFbIntAds(ServerActivity.this);
+            ApplovinActivity.loadApplovinInterstitial(ServerActivity.this);
+        }
 
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -96,6 +129,8 @@ public class ServerActivity extends AppCompatActivity {
 
 
     }
+
+    //------------- On Create End Here --------------
 
     private void retrieveSpreadsheetData() {
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url , null, new Response.Listener<JSONObject>() {
@@ -184,6 +219,8 @@ public class ServerActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
+                    showAllIntAds();
+
                     Intent intent = new Intent(ServerActivity.this, PlayVideo.class);
                     intent.putExtra("dataTitle", vdo_title + " | " + date);
                     intent.putExtra("dataUrl", vdo_url);
@@ -192,6 +229,17 @@ public class ServerActivity extends AppCompatActivity {
             });
 
             return myView;
+        }
+    }
+
+    //----------------- All Ads Show Code here --------------
+    private void showAllIntAds(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(100)+1;
+        if(randomNumber >=2 && randomNumber <=20 || randomNumber >=61 && randomNumber <=75 ){
+            ApplovinActivity.showApplivinAds();
+        }if(randomNumber >=35 && randomNumber <=50 || randomNumber >=85 && randomNumber <=99 ){
+            FacebookActivity.showFbIntAds();
         }
     }
 

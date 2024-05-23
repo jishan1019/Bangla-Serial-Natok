@@ -78,12 +78,7 @@
                android:background="@drawable/cover"
                android:orientation="vertical"
                >
-
            </LinearLayout>
-
-
-
-
        </androidx.cardview.widget.CardView>
 
        <!-- Active Server -->
@@ -374,7 +369,17 @@
 
        </ScrollView>
 
-
    </LinearLayout>
+
+
+    <!-- Ads Container-->
+    <LinearLayout
+        android:id="@+id/fbBanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </RelativeLayout>

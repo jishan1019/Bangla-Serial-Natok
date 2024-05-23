@@ -6,21 +6,47 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.facebook.ads.AdView;
+import com.facebook.ads.AudienceNetworkAds;
+import com.facebook.ads.InterstitialAd;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +54,17 @@ public class MainActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     TextView noticeTitle;
+    String url = decryptUrl(Config.BASE_URL);
+
+    private InterstitialAd fbIntAds;
+    private AdView fbadView;
+
+    LinearLayout fbBanLayout,maxBanLayout;
+
+    private String decryptUrl(String encryptedUrl) {
+        byte[] decodedBytes = Base64.decode(encryptedUrl, Base64.DEFAULT);
+        return new String(decodedBytes);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +93,34 @@ public class MainActivity extends AppCompatActivity {
         btn3 = activityMain.findViewById(R.id.btn3);
         btn4 = activityMain.findViewById(R.id.btn4);
         noticeTitle = activityMain.findViewById(R.id.noticeTitle);
+        fbBanLayout = activityMain.findViewById(R.id.fbBanLayout);
+
 
         noticeTitle.setSelected(true);
+
+
+        //-------------- Netowrk Check -----------------
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo!=null && networkInfo.isConnected()){
+            fetchAdsData();
+        }else {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setIcon(getDrawable(R.drawable.ic_baseline_signal_wifi_connected_no_internet_4_24))
+                    .setTitle("No internet Connection")
+                    .setMessage("Dear user please connect internet!")
+                    .setCancelable(false)
+                    .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+
+
 
         //------- All Action Button Code ----------------
 
@@ -73,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showAllIntAds();
                 startActivity(new Intent(MainActivity.this, ServerActivity.class));
             }
         });
@@ -80,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showAllIntAds();
                 startActivity(new Intent(MainActivity.this, ServerActivity.class));
             }
         });
@@ -88,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showAllIntAds();
                 startActivity(new Intent(MainActivity.this, ServerActivity.class));
             }
         });
@@ -96,9 +162,74 @@ public class MainActivity extends AppCompatActivity {
         btn4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showAllIntAds();
                 startActivity(new Intent(MainActivity.this, ServerActivity.class));
             }
         });
+    }
+
+
+    //-------------- Fetch Data -------------------------
+
+    private void fetchAdsData(){
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url , null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    JSONObject jsonObject = response.getJSONObject("aInfo");
+
+                    String applovinSdkKey = jsonObject.getString("asK");
+                    String applovinMaxId = jsonObject.getString("aMI");
+                    String facebookIntId = jsonObject.getString("fbIND");
+                    String facebookBannerId = jsonObject.getString("fbBID");
+                    String isAdsOpen = jsonObject.getString("aSts");
+
+                    Config.ApplovinSdkKey = applovinSdkKey;
+                    Config.ApplovinMaxId = applovinMaxId;
+                    Config.FacebookIntId = facebookIntId;
+                    Config.FacebookBanId = facebookBannerId;
+                    Config.isAdsOpen = isAdsOpen.contains("yes");
+
+                    try {
+                        ApplicationInfo applicationInfoApplovin = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+                        applicationInfoApplovin.metaData.putString("applovin.sdk.key", applovinSdkKey);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    AudienceNetworkAds.initialize(MainActivity.this);
+
+                    AppLovinSdk.getInstance( MainActivity.this ).setMediationProvider( "max" );
+                    AppLovinSdk.initializeSdk( MainActivity.this, new AppLovinSdk.SdkInitializationListener() {
+                        @Override
+                        public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
+                        {
+                        }
+                    } );
+
+                    if(Config.isAdsOpen){
+                        FacebookActivity.loadFbBannerAds(MainActivity.this, fbBanLayout);
+                        FacebookActivity.loadFbIntAds(MainActivity.this);
+                        ApplovinActivity.loadApplovinInterstitial(MainActivity.this);
+                    }
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(objectRequest);
+
     }
 
 
@@ -169,6 +300,31 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+
+    //----------- ADS Logic ------------------------------
+    private void showAllIntAds(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(100)+1;
+        if(randomNumber >=2 && randomNumber <=20 || randomNumber >=61 && randomNumber <=75 ){
+            ApplovinActivity.showApplivinAds();
+        }if(randomNumber >=35 && randomNumber <=50 || randomNumber >=85 && randomNumber <=99 ){
+            FacebookActivity.showFbIntAds();
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if (fbadView != null) {
+            fbadView.destroy();
+        }
+        if (fbIntAds != null) {
+            fbIntAds.destroy();
+        }
+        super.onDestroy();
+    }
+
 
 
     //------- Dower Select Item Button Code ----------------

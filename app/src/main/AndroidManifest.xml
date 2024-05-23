@@ -60,6 +60,14 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="8ezwW69yDo77JUvmFnbMg3JDU0Gkyi19zFhP9N5q42TNv5yriK7VkeN3LpduoOgN0aSf0TqfeVbFSc0ZzK1yDe" />
+
+
+
     </application>
 
 </manifest>

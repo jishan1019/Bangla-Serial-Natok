@@ -22,6 +22,18 @@
         android:id="@+id/listView"
         android:numColumns="2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:paddingBottom="65dp"
+        />
+
+    <!-- Ads Container-->
+    <LinearLayout
+        android:id="@+id/fbBanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </RelativeLayout>
