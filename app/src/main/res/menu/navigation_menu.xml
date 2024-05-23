@@ -3,16 +3,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="HardcodedText">
 
+   <group
+       android:id="@+id/group1"
+       >
     <item
-        android:id="@+id/nav_account"
-        android:title="My Account" />
+        android:id="@+id/nav_home"
+        android:title="হোম"
+        android:checkable="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        />
 
     <item
-        android:id="@+id/nav_settings"
-        android:title="Settings" />
+        android:id="@+id/nav_feedback"
+        android:title="ফিডব্যাক"
+        android:checkable="true"
+        android:icon="@drawable/ic_baseline_feedback_24"
+        />
 
     <item
-        android:id="@+id/nav_logout"
-        android:title="Logout" />
+        android:id="@+id/nav_rating"
+        android:title="রেটিং"
+        android:checkable="true"
+        android:icon="@drawable/ic_baseline_rating_24"
+        />
+
+    <item
+        android:id="@+id/nav_more"
+        android:title="আরো আপ্পস"
+        android:checkable="true"
+        android:icon="@drawable/ic_baseline_add_box_24"
+        />
+
+    <item
+        android:id="@+id/nav_update"
+        android:title="আপডেট করুন আপ্পস"
+        android:checkable="true"
+        android:icon="@drawable/ic_baseline_update_24"
+        />
+
+    </group>
+
+    <group
+        android:id="@+id/group2"
+        >
+        <item
+            android:id="@+id/nav_privacy"
+            android:title="প্রাইভেসি পলিসি"
+            android:checkable="true"
+            android:icon="@drawable/ic_baseline_security_24"
+            />
+    </group>
+
+
 
 </menu>

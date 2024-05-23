@@ -133,7 +133,7 @@
                            android:layout_marginLeft="5dp"
                            android:textColor="@color/black"
                            android:layout_gravity="center"
-                           android:text="আমাদের অ্যাকটিভ সারভার সমূহঃ"
+                           android:text="আমাদের অ্যাকটিভ সার্ভারঃ সমূহঃ"
                            android:fontFamily="@font/kalpurush"
                            android:layout_marginTop="2dp"
 

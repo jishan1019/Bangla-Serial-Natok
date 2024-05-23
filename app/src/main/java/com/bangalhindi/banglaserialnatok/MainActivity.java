@@ -26,12 +26,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.dower_navigation);
 
 
+        //------- Dower Navigation Code ----------------
+
         drawerLayout = findViewById(R.id.my_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FrameLayout container = findViewById(R.id.container);
+
+
+        //------- Layout Inflater Code ----------------
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View activityMain = inflater.inflate(R.layout.activity_main, container, false);
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         btn2 = activityMain.findViewById(R.id.btn2);
         btn3 = activityMain.findViewById(R.id.btn3);
         btn4 = activityMain.findViewById(R.id.btn4);
+
+        //------- All Action Button Code ----------------
 
         allBtn();
 
@@ -79,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    //------- Dower Select Item Button Code ----------------
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
