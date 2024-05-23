@@ -39,7 +39,10 @@
         </activity>
         <activity
             android:name=".PlayVideo"
-            android:exported="false">
+            android:exported="false"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

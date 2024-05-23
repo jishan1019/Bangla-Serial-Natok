@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -103,28 +104,38 @@ public class PlayVideo extends AppCompatActivity {
 
             @Override
             public void onHideCustomView() {
+                if (mCustomView == null) {
+                    return;  // nothing to hide
+                }
                 ((FrameLayout) getWindow().getDecorView()).removeView(mCustomView);
                 mCustomView = null;
                 getWindow().getDecorView().setSystemUiVisibility(mOriginalSystemUiVisibility);
                 setRequestedOrientation(mOriginalOrientation);
-                mCustomViewCallback.onCustomViewHidden();
-                mCustomViewCallback = null;
+                if (mCustomViewCallback != null) {
+                    mCustomViewCallback.onCustomViewHidden();
+                    mCustomViewCallback = null;
+                }
             }
 
             @Override
             public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
                 if (mCustomView != null) {
                     onHideCustomView();
-                    return;
                 }
                 mCustomView = view;
                 mOriginalSystemUiVisibility = getWindow().getDecorView().getSystemUiVisibility();
                 mOriginalOrientation = getRequestedOrientation();
                 mCustomViewCallback = callback;
 
-                ((FrameLayout) getWindow().getDecorView()).addView(mCustomView, new FrameLayout.LayoutParams(-1, -1));
-                getWindow().getDecorView().setSystemUiVisibility(3846);
-                setRequestedOrientation(0);
+                ((FrameLayout) getWindow().getDecorView()).addView(mCustomView, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
 
 
@@ -222,6 +233,17 @@ public class PlayVideo extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Do something when the screen is in landscape mode
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            // Do something when the screen is in portrait mode
+        }
     }
 
 

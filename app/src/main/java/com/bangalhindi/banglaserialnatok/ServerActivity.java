@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -64,7 +65,15 @@ public class ServerActivity extends AppCompatActivity {
         proBar = findViewById(R.id.proBar);
         listView = findViewById(R.id.listView);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("All Natok");
+        }
+
         proBar.setVisibility(View.VISIBLE);
+
+
+
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -176,7 +185,7 @@ public class ServerActivity extends AppCompatActivity {
                 public void onClick(View v) {
 
                     Intent intent = new Intent(ServerActivity.this, PlayVideo.class);
-                    intent.putExtra("dataTitle", vdo_title);
+                    intent.putExtra("dataTitle", vdo_title + " | " + date);
                     intent.putExtra("dataUrl", vdo_url);
                     ServerActivity.this.startActivity(intent);
                 }
@@ -184,6 +193,16 @@ public class ServerActivity extends AppCompatActivity {
 
             return myView;
         }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
