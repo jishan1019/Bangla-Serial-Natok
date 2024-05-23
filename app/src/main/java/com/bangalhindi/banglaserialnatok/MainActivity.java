@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -105,12 +109,16 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.nav_home) {
 
                 } else if (id == R.id.nav_feedback) {
+                    openAppInPlayStore();
 
                 }else if (id == R.id.nav_rating) {
+                    openAppInPlayStore();
 
                 }else if (id == R.id.nav_more) {
+                    openPublisherPageInPlayStore();
 
                 } else if (id == R.id.nav_update) {
+                    openAppInPlayStore();
 
                 } else if (id == R.id.nav_privacy) {
                     startActivity(new Intent(MainActivity.this, PrivacyActivity.class));
@@ -120,6 +128,41 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void openAppInPlayStore() {
+        String packageName = getPackageName(); // Get your app's package name
+
+        try {
+            // Try to open the app's page on the Play Store app
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // If the Play Store app is not installed, open the app's page on the Play Store website
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    private void openPublisherPageInPlayStore() {
+        // Specify the publisher name
+        String publisherName = "DhakaDevCraft";
+
+        try {
+            // Construct the URI to search for apps published by the specified publisher
+            Uri uri = Uri.parse("market://search?q=pub:" + publisherName);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // If the Play Store app is not installed, open the Play Store website
+            Uri uri = Uri.parse("https://play.google.com/store/search?q=pub:" + publisherName);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
 
