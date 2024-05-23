@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ServerActivity"
     android:background="@color/activityBackground"
+    android:keepScreenOn="true"
     >
 
     <ProgressBar
@@ -16,7 +17,7 @@
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
-
++
     <GridView
         android:id="@+id/listView"
         android:numColumns="2"

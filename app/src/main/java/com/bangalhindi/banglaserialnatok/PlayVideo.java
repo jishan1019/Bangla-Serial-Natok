@@ -57,6 +57,10 @@ public class PlayVideo extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        if (!isNetworkAvailable()) {
+            showConnectivityDialog();
+        }
+
 
         ActionBar supportActionBar = getSupportActionBar();
         TextView tvTitle = findViewById(R.id.tvTitle);
@@ -69,7 +73,7 @@ public class PlayVideo extends AppCompatActivity {
 
         if (title != null && supportActionBar != null) {
             supportActionBar.setTitle(title);
-            supportActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.brand_color1)));
+//            supportActionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.brand_color1)));
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -117,6 +121,7 @@ public class PlayVideo extends AppCompatActivity {
                 mOriginalSystemUiVisibility = getWindow().getDecorView().getSystemUiVisibility();
                 mOriginalOrientation = getRequestedOrientation();
                 mCustomViewCallback = callback;
+
                 ((FrameLayout) getWindow().getDecorView()).addView(mCustomView, new FrameLayout.LayoutParams(-1, -1));
                 getWindow().getDecorView().setSystemUiVisibility(3846);
                 setRequestedOrientation(0);
@@ -132,9 +137,6 @@ public class PlayVideo extends AppCompatActivity {
             new ExtractLinkTask().execute(url);
         }
 
-        if (!isNetworkAvailable()) {
-            showConnectivityDialog();
-        }
 
 
 
@@ -223,17 +225,6 @@ public class PlayVideo extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Landscape mode
-            vdoTitleContainer.setVisibility(View.GONE);
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // Portrait mode
-            vdoTitleContainer.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public void onBackPressed() {
