@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,14 +37,23 @@ import java.util.HashMap;
 
 public class ServerActivity extends AppCompatActivity {
 
-    String url = Config.BASE_URL;
-
+    String url = decryptUrl(Config.BASE_URL);
     GridView listView;
 
     ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
     HashMap<String,String> hashMap;
 
     ProgressBar proBar;
+
+
+    private String decryptUrl(String encryptedUrl) {
+        byte[] decodedBytes = Base64.decode(encryptedUrl, Base64.DEFAULT);
+        return new String(decodedBytes);
+    }
+
+    private String encryptUrl(String url) {
+        return Base64.encodeToString(url.getBytes(), Base64.DEFAULT);
+    }
 
 
     @Override
