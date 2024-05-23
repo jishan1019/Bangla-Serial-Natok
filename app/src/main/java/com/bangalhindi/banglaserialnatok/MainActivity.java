@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
         //------- All Action Button Code ----------------
 
         allBtn();
+        navigationView();
 
 
     }
+
+    //------- All CLick listener code ----------------
 
     private void allBtn(){
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +88,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ServerActivity.class));
+            }
+        });
+    }
+
+
+    //------- Navigation view button code ----------------
+    private void  navigationView(){
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle navigation view item clicks here.
+                int id = item.getItemId();
+
+                if (id == R.id.nav_home) {
+
+                } else if (id == R.id.nav_feedback) {
+
+                }else if (id == R.id.nav_rating) {
+
+                }else if (id == R.id.nav_more) {
+
+                } else if (id == R.id.nav_update) {
+
+                } else if (id == R.id.nav_privacy) {
+                    startActivity(new Intent(MainActivity.this, PrivacyActivity.class));
+                }
+
+                drawerLayout.closeDrawers();
+                return true;
             }
         });
     }
