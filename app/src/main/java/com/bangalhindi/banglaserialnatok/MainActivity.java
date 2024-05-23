@@ -11,6 +11,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +41,14 @@ import com.applovin.sdk.AppLovinSdkConfiguration;
 import com.facebook.ads.AdView;
 import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.InterstitialAd;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.appupdate.AppUpdateOptions;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
     LinearLayout fbBanLayout,maxBanLayout;
 
+    private static final int MY_REQUEST_CODE = 1001;
+    private AppUpdateManager appUpdateManager;
+
     private String decryptUrl(String encryptedUrl) {
         byte[] decodedBytes = Base64.decode(encryptedUrl, Base64.DEFAULT);
         return new String(decodedBytes);
@@ -70,6 +82,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dower_navigation);
+
+        //--------- App update manager ----------------
+        appUpdateManager = AppUpdateManagerFactory.create(this);
+
+        // Check for updates
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update
+                startUpdateFlow(appUpdateInfo);
+            }
+        });
 
 
         //------- Dower Navigation Code ----------------
@@ -168,6 +193,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    //------------- Apps Update Code -------------------
+    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    this,
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                    MY_REQUEST_CODE);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                // Handle update failure
+                Log.e("MainActivity", "Update flow failed! Result code: " + resultCode);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                startUpdateFlow(appUpdateInfo);
+            }
+        });
+    }
 
     //-------------- Fetch Data -------------------------
 
