@@ -1,4 +1,4 @@
-package com.bangalhindi.banglaserialnatok;
+package com.bangalhindi.serialdramaepisod;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -22,12 +21,10 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -44,7 +41,6 @@ public class PlayVideo extends AppCompatActivity {
     public int mOriginalSystemUiVisibility;
     public ProgressDialog progressDialog;
     public WebView webView;
-    Boolean videoTitleContainerStatus = true;
     LinearLayout vdoTitleContainer;
 
     @Override

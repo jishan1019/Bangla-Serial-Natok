@@ -1,4 +1,4 @@
-package com.bangalhindi.banglaserialnatok;
+package com.bangalhindi.serialdramaepisod;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
-import com.applovin.mediation.ads.MaxAdView;
 import com.applovin.mediation.ads.MaxInterstitialAd;
 
 public class ApplovinActivity {

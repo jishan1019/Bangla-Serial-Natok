@@ -1,4 +1,4 @@
-package com.bangalhindi.banglaserialnatok;
+package com.bangalhindi.serialdramaepisod;
 
 import android.content.Context;
 import android.widget.LinearLayout;

@@ -14,10 +14,10 @@
         />
 
     <item
-        android:id="@+id/nav_feedback"
-        android:title="ফিডব্যাক"
+        android:id="@+id/nav_fbgroup"
+        android:title="ফেসবুক গ্রুপ"
         android:checkable="true"
-        android:icon="@drawable/ic_baseline_feedback_24"
+        android:icon="@drawable/ic_baseline_group_24"
         />
 
     <item

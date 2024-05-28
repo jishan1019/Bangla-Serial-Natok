@@ -1,4 +1,4 @@
-package com.bangalhindi.banglaserialnatok;
+package com.bangalhindi.serialdramaepisod;
 
 import org.junit.Test;
 

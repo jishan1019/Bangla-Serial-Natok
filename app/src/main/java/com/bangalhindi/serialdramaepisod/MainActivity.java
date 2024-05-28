@@ -1,4 +1,4 @@
-package com.bangalhindi.banglaserialnatok;
+package com.bangalhindi.serialdramaepisod;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -7,13 +7,13 @@ import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,11 +24,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -50,28 +48,28 @@ import com.google.android.play.core.appupdate.AppUpdateOptions;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    String url = decryptUrl(Config.BASE_URL);
 
     CardView btn1, btn2, btn3, btn4;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     TextView noticeTitle;
-    String url = decryptUrl(Config.BASE_URL);
 
     private InterstitialAd fbIntAds;
     private AdView fbadView;
-
     LinearLayout fbBanLayout,maxBanLayout;
-
     private static final int MY_REQUEST_CODE = 1001;
     private AppUpdateManager appUpdateManager;
+    public ProgressDialog progressDialog;
+
+
 
     private String decryptUrl(String encryptedUrl) {
         byte[] decodedBytes = Base64.decode(encryptedUrl, Base64.DEFAULT);
@@ -82,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dower_navigation);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setCancelable(false);
+
+
 
         //--------- App update manager ----------------
         appUpdateManager = AppUpdateManagerFactory.create(this);
@@ -194,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     //------------- Apps Update Code -------------------
     private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
         try {
@@ -231,10 +236,10 @@ public class MainActivity extends AppCompatActivity {
     //-------------- Fetch Data -------------------------
 
     private void fetchAdsData(){
+        progressDialog.show();
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url , null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
                 try {
                     JSONObject jsonObject = response.getJSONObject("aInfo");
 
@@ -249,6 +254,8 @@ public class MainActivity extends AppCompatActivity {
                     Config.FacebookIntId = facebookIntId;
                     Config.FacebookBanId = facebookBannerId;
                     Config.isAdsOpen = isAdsOpen.contains("yes");
+
+                    progressDialog.dismiss();
 
                     try {
                         ApplicationInfo applicationInfoApplovin = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
@@ -266,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                         }
                     } );
+                    
 
                     if(Config.isAdsOpen){
                         FacebookActivity.loadFbBannerAds(MainActivity.this, fbBanLayout);
@@ -277,12 +285,13 @@ public class MainActivity extends AppCompatActivity {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    progressDialog.dismiss();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                progressDialog.dismiss();
             }
         });
 
@@ -303,8 +312,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (id == R.id.nav_home) {
 
-                } else if (id == R.id.nav_feedback) {
-                    openAppInPlayStore();
+                } else if (id == R.id.nav_fbgroup) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/profile.php?id=61560263304357"));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
                 }else if (id == R.id.nav_rating) {
                     openAppInPlayStore();

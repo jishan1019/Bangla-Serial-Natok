@@ -1,14 +1,11 @@
-package com.bangalhindi.banglaserialnatok;
+package com.bangalhindi.serialdramaepisod;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class PrivacyActivity extends AppCompatActivity {
 
